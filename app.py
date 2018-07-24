@@ -3,6 +3,7 @@ import json
 from flask import Flask, make_response, request, render_template
 
 import bot
+from config import CONFIG
 
 app = Flask(__name__)
 pyBot = bot.Bot()
@@ -112,7 +113,7 @@ def thanks():
 
 
 def main():
-    app.run(debug=True, port=5000)
+    app.run(debug=CONFIG.DEBUG, port=CONFIG.APP_PORT)
 
 
 if __name__ == '__main__':

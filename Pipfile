@@ -9,10 +9,12 @@ name = "pypi"
 
 slackclient = "*"
 flask = "*"
+pydantic = "*"
 
 
 [dev-packages]
 
+ipython = "*"
 
 
 [requires]

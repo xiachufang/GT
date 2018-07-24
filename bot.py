@@ -1,6 +1,6 @@
-import os
-
 from slackclient import SlackClient
+
+from config import CONFIG
 
 
 # To remember which teams have authorized your app and what tokens are
@@ -16,14 +16,14 @@ class Bot:
         super(Bot, self).__init__()
         # When we instantiate a new bot object, we can access the app
         # credentials we set earlier in our local development environment.
-        self.oauth = {"client_id": os.environ.get("CLIENT_ID"),
-                      "client_secret": os.environ.get("CLIENT_SECRET"),
+        self.oauth = {"client_id": CONFIG.SLACK_CLIENT_ID,
+                      "client_secret": CONFIG.SLACK_CLIENT_SECRET,
                       # Scopes provide and limit permissions to what our app
                       # can access. It's important to use the most restricted
                       # scope that your app will need.
                       "scope": "bot"}
 
-        self.verification = os.environ.get("VERIFICATION_TOKEN")
+        self.verification = CONFIG.SLACK_VERIFICATION_TOKEN
         self.client = SlackClient("")
 
     def auth(self, code):
