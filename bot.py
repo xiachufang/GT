@@ -67,10 +67,15 @@ class Bot:
                                    text=f'user({user_id}) add you a poultry leg')
         return ret["ok"]
 
+    def get_user_data(self, user_id):
+        ret = self.client.api_call("users.info", user=user_id)
+        return ret["user"]
+
     def tell_leaderboard(self, channel):
         leg_leadboard_data = get_leg_leadboard()
         lines = ['=== 🍗 排行榜 🍗 ===']
-        for row in leg_leadboard_data:
-            lines.append(f'{row[0]} 🍗x{row[1]}')
+        for idx, row in enumerate(leg_leadboard_data):
+            user_name = self.get_user_data(row[0])['name']
+            lines.append(f'{idx + 1}. {user_name} 🍗 x {row[1]}')
         ret = self.client.api_call("chat.postMessage", channel=channel, text='\n'.join(lines))
         return ret["ok"]

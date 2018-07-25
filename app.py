@@ -4,7 +4,7 @@ from flask import Flask, make_response, request
 
 import bot
 from config import CONFIG
-from storage import create_database, create_tables, get_or_create_event_log, create_user_message_reaction_log
+from storage import create_tables, get_or_create_event_log, create_user_message_reaction_log
 from utils import hash_data
 
 app = Flask(__name__)
