@@ -77,7 +77,7 @@ def create_user_message_reaction_log(to_user_id, from_user_id, message_hash, rea
         pass
 
 
-def get_leg_leadboard():
+def get_leg_leaderboard():
     ct_field = fn.COUNT(UserMessageReactionLog.id).alias('ct')
     query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field).\
         where(UserMessageReactionLog.reaction == 'poultry_leg').\

@@ -39,8 +39,7 @@ def _event_handler(event_type, slack_event):
         item_user_id = slack_event["event"].get("item_user")
         reaction = slack_event["event"]["reaction"]
         # only log others' poultry_leg reaction to a real user
-        # if item_user_id and item_user_id != user_id and reaction == 'poultry_leg':
-        if item_user_id and reaction == 'poultry_leg':      # test
+        if item_user_id and reaction == 'poultry_leg' and (CONFIG.DEBUG or item_user_id != user_id):
             message = json.dumps(slack_event["event"]["item"], separators=(',', ':'))
             print(f'{user_id} ({reaction}) > {item_user_id} @({message})')
             create_user_message_reaction_log(to_user_id=item_user_id, from_user_id=user_id,
