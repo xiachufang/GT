@@ -24,39 +24,39 @@ class Bot:
                       "scope": "bot"}
 
         self.verification = CONFIG.SLACK_VERIFICATION_TOKEN
-        self.client = SlackClient("")
+        self.client = SlackClient(CONFIG.SLACK_BOT_OAUTH_ACCESS_TOKEN)
 
-    def auth(self, code):
-        """
-        Authenticate with OAuth and assign correct scopes.
-        Save a dictionary of authed team information in memory on the bot
-        object.
-
-        Parameters
-        ----------
-        code : str
-            temporary authorization code sent by Slack to be exchanged for an
-            OAuth token
-
-        """
-        # After the user has authorized this app for use in their Slack team,
-        # Slack returns a temporary authorization code that we'll exchange for
-        # an OAuth token using the oauth.access endpoint
-        auth_response = self.client.api_call(
-                                "oauth.access",
-                                client_id=self.oauth["client_id"],
-                                client_secret=self.oauth["client_secret"],
-                                code=code
-                                )
-        # To keep track of authorized teams and their associated OAuth tokens,
-        # we will save the team ID and bot tokens to the global
-        # authed_teams object
-        team_id = auth_response["team_id"]
-        print('>>> token:')
-        print(auth_response["bot"]["bot_access_token"])
-        authed_teams[team_id] = {"bot_token": auth_response["bot"]["bot_access_token"]}
-        # Then we'll reconnect to the Slack Client with the correct team's bot token
-        self.client = SlackClient(authed_teams[team_id]["bot_token"])
+    # def auth(self, code):
+    #     """
+    #     Authenticate with OAuth and assign correct scopes.
+    #     Save a dictionary of authed team information in memory on the bot
+    #     object.
+    #
+    #     Parameters
+    #     ----------
+    #     code : str
+    #         temporary authorization code sent by Slack to be exchanged for an
+    #         OAuth token
+    #
+    #     """
+    #     # After the user has authorized this app for use in their Slack team,
+    #     # Slack returns a temporary authorization code that we'll exchange for
+    #     # an OAuth token using the oauth.access endpoint
+    #     auth_response = self.client.api_call(
+    #                             "oauth.access",
+    #                             client_id=self.oauth["client_id"],
+    #                             client_secret=self.oauth["client_secret"],
+    #                             code=code
+    #                             )
+    #     # To keep track of authorized teams and their associated OAuth tokens,
+    #     # we will save the team ID and bot tokens to the global
+    #     # authed_teams object
+    #     team_id = auth_response["team_id"]
+    #     print('>>> token:')
+    #     print(auth_response["bot"]["bot_access_token"])
+    #     authed_teams[team_id] = {"bot_token": auth_response["bot"]["bot_access_token"]}
+    #     # Then we'll reconnect to the Slack Client with the correct team's bot token
+    #     self.client = SlackClient(authed_teams[team_id]["bot_token"])
 
     def notify_being_added_poultry_leg(self, user_id, item_user_id):
         ret = self.client.api_call("im.open", user=item_user_id)
@@ -64,3 +64,9 @@ class Bot:
         ret = self.client.api_call("chat.postMessage", channel=dm_channel,
                                    text=f'user({user_id}) add you a poultry leg')
         return ret["ok"]
+
+    def tell_leaderboard(self, channel):
+        ret = self.client.api_call("chat.postMessage", channel=channel, text=f'=== leg list ===')
+        # TODO: tell real leadboard
+        return ret["ok"]
+
