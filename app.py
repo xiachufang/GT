@@ -47,12 +47,13 @@ def _event_handler(event_type, slack_event):
                                              message_hash=hash_data(slack_event["event"]["item"]),
                                              reaction=reaction)
             # pyBot.notify_being_added_poultry_leg(user_id=user_id, item_user_id=item_user_id)
-        return make_response("reaction logged", 200,)
+        return make_response("reaction logged", 200, )
     # If the user has mentioned the app
     elif event_type == "app_mention":
         # text = slack_event["event"]["text"]
         channel = slack_event["event"]["channel"]
         pyBot.tell_leaderboard(channel)
+        return make_response("reaction logged", 200, )
 
     # ============= Event Type Not Found! ============= #
     # If the event_type does not have a handler
