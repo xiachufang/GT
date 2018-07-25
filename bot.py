@@ -7,6 +7,8 @@ from config import CONFIG
 # associated with each team, we can store this information in memory on
 # as a global object. When your bot is out of development, it's best to
 # save this in a more persistant memory store.
+from storage import get_leg_leadboard
+
 authed_teams = {}
 
 
@@ -66,7 +68,9 @@ class Bot:
         return ret["ok"]
 
     def tell_leaderboard(self, channel):
-        ret = self.client.api_call("chat.postMessage", channel=channel, text=f'=== leg list ===')
-        # TODO: tell real leadboard
+        leg_leadboard_data = get_leg_leadboard()
+        lines = ['=== 🍗 排行榜 🍗 ===']
+        for row in leg_leadboard_data:
+            lines.append(f'{row[0]} 🍗x{row[1]}')
+        ret = self.client.api_call("chat.postMessage", channel=channel, text='\n'.join(lines))
         return ret["ok"]
-

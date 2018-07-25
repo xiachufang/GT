@@ -1,7 +1,7 @@
 import datetime
 
 import pymysql
-from peewee import Model, MySQLDatabase, CharField, DateTimeField, Tuple
+from peewee import Model, MySQLDatabase, CharField, DateTimeField, IntegrityError, fn
 
 from config import CONFIG
 
@@ -69,5 +69,24 @@ def get_or_create_event_log(event_hash: str):
     return EventLog.get_or_create(event_hash=event_hash)
 
 
+def create_user_message_reaction_log(to_user_id, from_user_id, message_hash, reaction):
+    try:
+        UserMessageReactionLog.create(to_user_id=to_user_id, from_user_id=from_user_id,
+                                      message_hash=message_hash, reaction=reaction)
+    except IntegrityError:
+        pass
+
+
+def get_leg_leadboard():
+    ct_field = fn.COUNT(UserMessageReactionLog.id).alias('ct')
+    query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field).\
+        where(UserMessageReactionLog.reaction == 'poultry_leg').\
+        group_by(UserMessageReactionLog.to_user_id).order_by(ct_field.desc()).limit(20)
+    ret = []
+    for row_data in query:
+        ret.append((row_data.to_user_id, row_data.ct))
+    return ret
+
+
 def create_tables():
-    db.create_tables([EventLog,])
+    db.create_tables([EventLog, UserMessageReactionLog])

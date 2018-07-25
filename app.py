@@ -4,7 +4,7 @@ from flask import Flask, make_response, request
 
 import bot
 from config import CONFIG
-from storage import create_database, create_tables, get_or_create_event_log
+from storage import create_database, create_tables, get_or_create_event_log, create_user_message_reaction_log
 from utils import hash_data
 
 app = Flask(__name__)
@@ -41,9 +41,11 @@ def _event_handler(event_type, slack_event):
         # only log others' poultry_leg reaction to a real user
         # if item_user_id and item_user_id != user_id and reaction == 'poultry_leg':
         if item_user_id and reaction == 'poultry_leg':      # test
-            item = json.dumps(slack_event["event"]["item"], separators=(',', ':'))
-            print(f'{user_id} ({reaction}) > {item_user_id} @({item})')
-            # TODO: add to log
+            message = json.dumps(slack_event["event"]["item"], separators=(',', ':'))
+            print(f'{user_id} ({reaction}) > {item_user_id} @({message})')
+            create_user_message_reaction_log(to_user_id=item_user_id, from_user_id=user_id,
+                                             message_hash=hash_data(slack_event["event"]["item"]),
+                                             reaction=reaction)
             # pyBot.notify_being_added_poultry_leg(user_id=user_id, item_user_id=item_user_id)
         return make_response("reaction logged", 200,)
     # If the user has mentioned the app
