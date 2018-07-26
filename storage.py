@@ -40,7 +40,7 @@ class EventLog(BaseModel):
     prevent duplicate processing
     """
     event_hash = CharField(index=True)
-    c_time = DateTimeField(default=datetime.datetime.now())
+    c_time = DateTimeField(default=datetime.datetime.now)
 
 
 class UserMessageReactionLog(BaseModel):
@@ -52,7 +52,7 @@ class UserMessageReactionLog(BaseModel):
     from_user_id = CharField()      # reaction from
     message_hash = CharField()
     reaction = CharField()
-    c_time = DateTimeField(default=datetime.datetime.now())
+    c_time = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
         indexes = (
