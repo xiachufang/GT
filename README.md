@@ -22,3 +22,5 @@ DB_NAME="gt" DB_USER="root" DB_HOST="localhost" DB_PORT=3307 DB_PASSWORD=""  pip
 
 ## Development
 参考 `gt/plugins/chickens.py`，增加新的 plugin。然后将新写的 plugin 增加到 `local_settings.py` 即可。
+
+参考文档： http://slack-machine.readthedocs.io/en/latest/plugins/basics.html
