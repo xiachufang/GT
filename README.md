@@ -6,18 +6,18 @@ Inspired by [HeyTaco](https://www.heytaco.chat/), follow [Slack-Python-Onboardin
 
 ## Setup Database
 ```bash
-GT_DB_NAME="gt" GT_DB_USER="root" GT_DB_HOST="localhost" GT_DB_PORT=3307 GT_DB_PASSWORD=""  pipenv run python commands/create_db_and_tables.py
+> GT_DB_NAME="gt" GT_DB_USER="root" GT_DB_HOST="localhost" GT_DB_PORT=3307 GT_DB_PASSWORD=""  pipenv run python commands/create_db_and_tables.py
 ```
 
+
+## Setup Environment
+```bash
+> pipenv install -d
+```
 
 ## Run
 ```bash
 > SM_SLACK_API_TOKEN="xxxxxxx" GT_DB_NAME="gt" GT_DB_USER="root" GT_DB_HOST="localhost" GT_DB_PORT=3307 DB_PASSWORD="" ./run
-```
-
-## Setup Development Environment
-```bash
-> pipenv update
 ```
 
 ## Development
