@@ -4,6 +4,8 @@ from machine.plugins.base import MachineBasePlugin, Message
 from machine.plugins.decorators import respond_to, process
 from slackclient.user import User
 
+from texttable import Texttable
+
 from ..store.storage import create_user_message_reaction_log, get_leg_leaderboard
 from ..utils.helpers import hash_data, json_compact_dumps
 
@@ -21,16 +23,20 @@ class ChickensPlugin(MachineBasePlugin):
     @respond_to('.*')
     def tell_leaderboard(self, msg: Message):
         leg_leaderboard_data = get_leg_leaderboard()
-        lines = ['=== 🍗 排行榜 🍗 ===']
+
+        table = Texttable()
+        table.set_cols_align(["l", "r", "l"])
+        table.add_row(['Index', 'Name', '🍗'])
         users = self.users
+
         for idx, (user_id, t) in enumerate(leg_leaderboard_data):
             user: User = users.get(user_id)
             user_name = user_id
             if user:
                 user_name = user.name
-            lines.append(f'{idx + 1}. @{user_name} 🍗 x {t}')
-        reply = '\n'.join(lines)
-        msg.say(reply)
+            table.add_row([idx + 1, user_name, f'🍗 x {t}'])
+
+        msg.say(f'=== 🍗 排行榜 🍗 ===\n```{table.draw()}```')
 
     @process('reaction_added')
     def reaction_to(self, event: Dict[str, Any]):
