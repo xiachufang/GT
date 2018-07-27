@@ -27,6 +27,6 @@ Inspired by [HeyTaco](https://www.heytaco.chat/), follow [Slack-Python-Onboardin
 
 ## Docker
 ```bash
-# docker build . -t wg
-# docker run wg
+# docker build . -t gt
+# docker run gt
 ```
