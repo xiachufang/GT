@@ -24,3 +24,9 @@ Inspired by [HeyTaco](https://www.heytaco.chat/), follow [Slack-Python-Onboardin
 参考 `gt/plugins/chickens.py`，增加新的 plugin。然后将新写的 plugin 增加到 `local_settings.py` 即可。
 
 参考文档： http://slack-machine.readthedocs.io/en/latest/plugins/basics.html
+
+## Docker
+```bash
+# docker build . -t wg
+# docker run wg
+```
