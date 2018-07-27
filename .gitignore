@@ -215,3 +215,5 @@ venv.bak/
 
 # pycharm
 .idea/
+.github/
+
