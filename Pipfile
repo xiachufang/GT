@@ -8,6 +8,7 @@ pydantic = "*"
 peewee = "*"
 pymysql = "*"
 slack-machine = "*"
+texttable = "*"
 
 [dev-packages]
 ipython = "*"
