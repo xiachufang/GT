@@ -17,10 +17,16 @@ Inspired by [HeyTaco](https://www.heytaco.chat/), follow [Slack-Python-Onboardin
 
 ## Run
 ```bash
-> SM_SLACK_API_TOKEN="xxxxxxx" GT_DB_NAME="gt" GT_DB_USER="root" GT_DB_HOST="localhost" GT_DB_PORT=3307 DB_PASSWORD="" ./run
+> SM_SLACK_API_TOKEN="xxxxxxx" GT_DB_NAME="gt" GT_DB_USER="root" GT_DB_HOST="localhost" GT_DB_PORT=3307 GT_DB_PASSWORD="" ./run
 ```
 
 ## Development
 参考 `gt/plugins/chickens.py`，增加新的 plugin。然后将新写的 plugin 增加到 `local_settings.py` 即可。
 
 参考文档： http://slack-machine.readthedocs.io/en/latest/plugins/basics.html
+
+## Docker
+```bash
+# docker build . -t gt
+# docker run gt
+```
