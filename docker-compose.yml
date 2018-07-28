@@ -3,7 +3,7 @@ version: '3'
 services:
   slack_machine:
     build: .
-    #    restart: always
+    restart: always
     network_mode: "host"
     env_file:
     - slack-machine.env
