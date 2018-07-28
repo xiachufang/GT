@@ -57,4 +57,4 @@ class ChickensPlugin(MachineBasePlugin):
         create_user_message_reaction_log(to_user_id=item_user_id, from_user_id=user_id,
                                          message_hash=hash_data(event["item"]),
                                          reaction=reaction)
-        self.send_dm(item_user_id, f'<@{user_id}> 热情的给你送了一个的鸡腿')
+        # self.send_dm(item_user_id, f'<@{user_id}> 热情的给你送了一个的鸡腿')
