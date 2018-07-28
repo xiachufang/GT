@@ -26,7 +26,9 @@ Inspired by [HeyTaco](https://www.heytaco.chat/), follow [Slack-Python-Onboardin
 参考文档： http://slack-machine.readthedocs.io/en/latest/plugins/basics.html
 
 ## Docker
-```bash
-# docker build . -t gt
-# docker run gt
-```
+1. 安装 Docker 与 docker-compose
+2. 执行如下命令
+
+    ```bash
+    # docker-compose up --build -d
+    ```
