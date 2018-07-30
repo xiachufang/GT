@@ -1,13 +1,13 @@
+import logging
 from typing import Any, Dict
 
 from machine.plugins.base import MachineBasePlugin, Message
 from machine.plugins.decorators import respond_to, process
 from slackclient.user import User
-
 from texttable import Texttable
 
 from ..store.storage import create_user_message_reaction_log, get_leg_leaderboard
-from ..utils.helpers import hash_data, json_compact_dumps
+from ..utils.helpers import hash_data
 
 
 class ChickensPlugin(MachineBasePlugin):
@@ -22,6 +22,7 @@ class ChickensPlugin(MachineBasePlugin):
 
     @respond_to('.*')
     def tell_leaderboard(self, msg: Message):
+        logging.error(f'*, {msg}')  # test for a while
         leg_leaderboard_data = get_leg_leaderboard()
 
         table = Texttable()
@@ -40,6 +41,7 @@ class ChickensPlugin(MachineBasePlugin):
 
     @process('reaction_added')
     def reaction_to(self, event: Dict[str, Any]):
+        logging.error(f'reaction_added, {event}')  # test for a while
         user_id = event["user"]
         item_user_id = event.get("item_user", None)
         reaction = event["reaction"]
