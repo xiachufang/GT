@@ -21,7 +21,7 @@ class ChickensPlugin(MachineBasePlugin):
         return self._bot_info
 
     # respond to anything but bot's join channel message
-    @respond_to(r'^(?!has joined the channel).*')
+    @respond_to(r'^(?!has joined).*')
     def tell_leaderboard(self, msg: Message):
         logging.error(f'*, {msg}')  # test for a while
         leg_leaderboard_data = get_leg_leaderboard()
