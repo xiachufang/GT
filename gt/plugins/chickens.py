@@ -2,12 +2,12 @@ import logging
 from typing import Any, Dict
 
 from machine.plugins.base import MachineBasePlugin, Message
-from machine.plugins.decorators import respond_to, process, listen_to
+from machine.plugins.decorators import respond_to, process, listen_to, schedule
 from slackclient.user import User
 from texttable import Texttable
 
-from ..store.storage import create_user_message_reaction_log, get_leg_leaderboard
-from ..utils.helpers import hash_data
+from ..store.storage import create_user_message_reaction_log, get_leaderboard
+from ..utils.helpers import hash_data, get_this_monday, get_prev_monday
 
 
 def _create_user_message_reaction_log(to_user_id: str, from_user_id: str, msg_data: dict, reaction: str):
@@ -19,6 +19,22 @@ def _create_user_message_reaction_log(to_user_id: str, from_user_id: str, msg_da
     create_user_message_reaction_log(to_user_id=to_user_id, from_user_id=from_user_id,
                                      message_hash=hash_data(msg_data),
                                      reaction=reaction)
+
+
+def _get_leaderboard_msg_text(title, users, from_time=None, to_time=None):
+    leaderboard_data = get_leaderboard(from_time=from_time, to_time=to_time)
+
+    table = Texttable()
+    table.set_cols_align(["l", "r", "l"])
+    table.add_row(['Rank', 'Name', '🍗'])
+
+    for idx, (user_id, t) in enumerate(leaderboard_data):
+        user: User = users.get(user_id)
+        user_name = user_id
+        if user:
+            user_name = user.name
+        table.add_row([idx + 1, user_name, f'🍗 x {t}'])
+    return f'=== 🍗 {title} 🍗 ===\n```{table.draw()}```'
 
 
 class ChickensPlugin(MachineBasePlugin):
@@ -35,20 +51,10 @@ class ChickensPlugin(MachineBasePlugin):
     @respond_to(r'^(?!has joined).*')
     def tell_leaderboard(self, msg: Message):
         logging.error(f'tell_leaderboard, {msg}')  # test for a while
-        leg_leaderboard_data = get_leg_leaderboard()
 
-        table = Texttable()
-        table.set_cols_align(["l", "r", "l"])
-        table.add_row(['Index', 'Name', '🍗'])
-        users = self.users
-
-        for idx, (user_id, t) in enumerate(leg_leaderboard_data):
-            user: User = users.get(user_id)
-            user_name = user_id
-            if user:
-                user_name = user.name
-            table.add_row([idx + 1, user_name, f'🍗 x {t}'])
-        msg.say(f'=== 🍗 排行榜 🍗 ===\n```{table.draw()}```')
+        from_time = get_this_monday()
+        text = _get_leaderboard_msg_text('本周排行榜', self.users, from_time=from_time)
+        msg.say(text)
 
     @listen_to(r'\<@(?P<to_user_id>.+)\>.*:poultry_leg:.*')
     def add_poultry_leg_by_mention(self, msg: Message, to_user_id: str):
@@ -80,3 +86,9 @@ class ChickensPlugin(MachineBasePlugin):
         _create_user_message_reaction_log(from_user_id=user_id, to_user_id=item_user_id,
                                           msg_data=event["item"], reaction=reaction)
         # self.send_dm(item_user_id, f'<@{user_id}> 热情的给你送了一个的鸡腿')
+
+    @schedule(hour='10', minute='0', day_of_week='mon')
+    def leaderboard_weekly(self):
+        from_time, to_time = get_prev_monday(), get_this_monday()
+        text = _get_leaderboard_msg_text('上周排行榜', self.users, from_time=from_time, to_time=to_time)
+        self.say('gt2', text)
