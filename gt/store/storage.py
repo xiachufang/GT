@@ -63,7 +63,7 @@ def create_user_message_reaction_log(to_user_id, from_user_id, message_hash, rea
         pass
 
 
-def get_leg_leaderboard(from_time: Optional[datetime.datetime] = None, to_time: Optional[datetime.datetime] = None)\
+def get_leaderboard(from_time: Optional[datetime.datetime] = None, to_time: Optional[datetime.datetime] = None)\
         -> List[Tuple[str, int]]:
     ct_field = fn.COUNT(UserMessageReactionLog.id).alias('ct')
     query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field). \
