@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 import json
 
@@ -13,3 +14,10 @@ def json_compact_dumps(data: dict) -> str:
 
 def json_loads(s: str) -> dict:
     return json.load(s)
+
+
+def this_monday():
+    now = datetime.datetime.now()
+    today = datetime.datetime(now.year, now.month, now.day)
+    this_monday = today - datetime.timedelta(now.weekday())
+    return this_monday

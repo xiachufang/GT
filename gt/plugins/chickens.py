@@ -7,7 +7,7 @@ from slackclient.user import User
 from texttable import Texttable
 
 from ..store.storage import create_user_message_reaction_log, get_leg_leaderboard
-from ..utils.helpers import hash_data
+from ..utils.helpers import hash_data, this_monday
 
 
 def _create_user_message_reaction_log(to_user_id: str, from_user_id: str, msg_data: dict, reaction: str):
@@ -35,7 +35,9 @@ class ChickensPlugin(MachineBasePlugin):
     @respond_to(r'^(?!has joined).*')
     def tell_leaderboard(self, msg: Message):
         logging.error(f'tell_leaderboard, {msg}')  # test for a while
-        leg_leaderboard_data = get_leg_leaderboard()
+
+        from_time = this_monday()
+        leg_leaderboard_data = get_leg_leaderboard(from_time=from_time)
 
         table = Texttable()
         table.set_cols_align(["l", "r", "l"])
@@ -48,7 +50,7 @@ class ChickensPlugin(MachineBasePlugin):
             if user:
                 user_name = user.name
             table.add_row([idx + 1, user_name, f'🍗 x {t}'])
-        msg.say(f'=== 🍗 排行榜 🍗 ===\n```{table.draw()}```')
+        msg.say(f'=== 🍗 本周排行榜 🍗 ===\n```{table.draw()}```')
 
     @listen_to(r'\<@(?P<to_user_id>.+)\>.*:poultry_leg:.*')
     def add_poultry_leg_by_mention(self, msg: Message, to_user_id: str):

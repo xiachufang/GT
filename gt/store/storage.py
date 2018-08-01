@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from peewee import Model, MySQLDatabase, CharField, DateTimeField, IntegrityError, fn
 
@@ -63,11 +63,16 @@ def create_user_message_reaction_log(to_user_id, from_user_id, message_hash, rea
         pass
 
 
-def get_leg_leaderboard() -> List[Tuple[str, int]]:
+def get_leg_leaderboard(from_time: Optional[datetime.datetime] = None, to_time: Optional[datetime.datetime] = None)\
+        -> List[Tuple[str, int]]:
     ct_field = fn.COUNT(UserMessageReactionLog.id).alias('ct')
     query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field). \
-        where(UserMessageReactionLog.reaction == 'poultry_leg'). \
-        group_by(UserMessageReactionLog.to_user_id).order_by(ct_field.desc()).limit(20)
+        where(UserMessageReactionLog.reaction == 'poultry_leg')
+    if from_time:
+        query = query.where(UserMessageReactionLog.c_time >= from_time)
+    if to_time:
+        query =query.where(UserMessageReactionLog.c_time <= to_time)
+    query = query.group_by(UserMessageReactionLog.to_user_id).order_by(ct_field.desc()).limit(20)
     ret = []
     for row_data in query:
         ret.append((row_data.to_user_id, row_data.ct))
