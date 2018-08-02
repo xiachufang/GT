@@ -1,11 +1,34 @@
 import datetime
 from typing import List, Tuple, Optional
 
-from peewee import Model, MySQLDatabase, CharField, DateTimeField, IntegrityError, fn
+from peewee import Model, MySQLDatabase, CharField, DateTimeField, IntegrityError, fn, OperationalError, \
+    __exception_wrapper__
 
 from ..config import DB_CONFIG
 
-db = MySQLDatabase(
+
+class RetryOperationalError(object):
+
+    def execute_sql(self, sql, params=None, commit=True):
+        try:
+            cursor = super(RetryOperationalError, self).execute_sql(
+                sql, params, commit)
+        except OperationalError:
+            if not self.is_closed():
+                self.close()
+            with __exception_wrapper__:
+                cursor = self.cursor()
+                cursor.execute(sql, params or ())
+                if commit and not self.in_transaction():
+                    self.commit()
+        return cursor
+
+
+class MyRetryDB(RetryOperationalError, MySQLDatabase):
+    pass
+
+
+db = MyRetryDB(
     DB_CONFIG.DB_NAME,
     user=DB_CONFIG.DB_USER,
     host=DB_CONFIG.DB_HOST,
