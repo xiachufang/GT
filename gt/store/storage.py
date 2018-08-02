@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 from typing import List, Tuple, Optional
 
 from peewee import Model, MySQLDatabase, CharField, DateTimeField, IntegrityError, fn, OperationalError, \
@@ -52,6 +53,12 @@ class EventLog(BaseModel):
     c_time = DateTimeField(default=datetime.datetime.now)
 
 
+class AbstractReaction(str, Enum):
+    """abstract reaction, not only the 'reaction' in slack"""
+    REACTION_POULTRY_LEG = 'poultry_leg'
+    MENTION_POULTRY_LEG = '@+poultry_leg'
+
+
 class UserMessageReactionLog(BaseModel):
     """
     user message reaction log
@@ -60,7 +67,7 @@ class UserMessageReactionLog(BaseModel):
     to_user_id = CharField()  # reaction to
     from_user_id = CharField()  # reaction from
     message_hash = CharField()
-    reaction = CharField()
+    reaction = CharField()  # AbstractReaction
     c_time = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
@@ -89,8 +96,7 @@ def create_user_message_reaction_log(to_user_id, from_user_id, message_hash, rea
 def get_leaderboard(from_time: Optional[datetime.datetime] = None, to_time: Optional[datetime.datetime] = None)\
         -> List[Tuple[str, int]]:
     ct_field = fn.COUNT(UserMessageReactionLog.id).alias('ct')
-    query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field). \
-        where(UserMessageReactionLog.reaction == 'poultry_leg')
+    query = UserMessageReactionLog.select(UserMessageReactionLog.to_user_id, ct_field)
     if from_time:
         query = query.where(UserMessageReactionLog.c_time >= from_time)
     if to_time:

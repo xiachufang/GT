@@ -6,7 +6,7 @@ from machine.plugins.decorators import respond_to, process, listen_to, schedule
 from slackclient.user import User
 from texttable import Texttable
 
-from ..store.storage import create_user_message_reaction_log, get_leaderboard
+from ..store.storage import create_user_message_reaction_log, get_leaderboard, AbstractReaction
 from ..utils.helpers import hash_data, get_this_monday, get_prev_monday
 
 
@@ -69,7 +69,7 @@ class ChickensPlugin(MachineBasePlugin):
             return
 
         _create_user_message_reaction_log(from_user_id=from_user_id, to_user_id=to_user_id,
-                                          msg_data=msg_data, reaction="poultry_leg")
+                                          msg_data=msg_data, reaction=AbstractReaction.MENTION_POULTRY_LEG)
 
     @process('reaction_added')
     def add_poultry_leg_by_reaction(self, event: Dict[str, Any]):
@@ -84,7 +84,7 @@ class ChickensPlugin(MachineBasePlugin):
             return
 
         _create_user_message_reaction_log(from_user_id=user_id, to_user_id=item_user_id,
-                                          msg_data=event["item"], reaction=reaction)
+                                          msg_data=event["item"], reaction=AbstractReaction.REACTION_POULTRY_LEG)
         # self.send_dm(item_user_id, f'<@{user_id}> 热情的给你送了一个的鸡腿')
 
     @schedule(hour='10', minute='0', day_of_week='mon')
