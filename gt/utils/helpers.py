@@ -24,4 +24,4 @@ def get_this_monday():
 
 def get_prev_monday():
     this_monday = get_this_monday()
-    return this_monday - datetime.timedelta(days=-1)
+    return this_monday - datetime.timedelta(days=7)
