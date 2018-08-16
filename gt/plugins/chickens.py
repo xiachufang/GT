@@ -91,4 +91,4 @@ class ChickensPlugin(MachineBasePlugin):
     def leaderboard_weekly(self):
         from_time, to_time = get_prev_monday(), get_this_monday()
         text = _get_leaderboard_msg_text('上周排行榜', self.users, from_time=from_time, to_time=to_time)
-        self.say('gt2', text)
+        self.say('general', text)
