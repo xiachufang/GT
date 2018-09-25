@@ -220,3 +220,4 @@ venv.bak/
 .*.swp
 
 slack-machine.env
+.vscode/settings.json
