@@ -15,7 +15,7 @@ COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
 
 # -- Install dependencies:
-RUN set -ex && pipenv install --deploy
+RUN set -ex && pipenv install --deploy && pipenv run pyppeteer-install
 
 COPY . /app
 
