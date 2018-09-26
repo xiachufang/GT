@@ -9,6 +9,8 @@ peewee = "*"
 pymysql = "*"
 slack-machine = "*"
 texttable = "*"
+pyppeteer = "*"
+"delegator.py" = "*"
 
 [dev-packages]
 ipython = "*"

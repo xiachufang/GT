@@ -6,4 +6,5 @@ PLUGINS = [
     'machine.plugins.builtin.general.HelloPlugin',
     'machine.plugins.builtin.debug.EventLoggerPlugin',
     'gt.plugins.chickens.ChickensPlugin',
+    'gt.plugins.yuque.YuQuePlugin',
 ]
