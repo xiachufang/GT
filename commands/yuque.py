@@ -10,14 +10,20 @@ Options:
   --version     Show version.
 
 """
+import os
 import sys
+
 from contextlib import asynccontextmanager
 
 import asyncio
 import docopt
 from pyppeteer import launch
 from pyppeteer.browser import Browser
-from gt.config.yuque import YuqueConfig
+
+cwd = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, cwd)
+
+from gt.config import YUQUE_CONFIG
 
 
 @asynccontextmanager
@@ -59,8 +65,8 @@ async def login(browser: Browser):
     page = await browser.newPage()
     await page.goto('https://xcf.yuque.com/login')
 
-    await page.type('#login', YuqueConfig.USERNAME)
-    await page.type('#password', YuqueConfig.PASSWORD)
+    await page.type('#login', YUQUE_CONFIG.USERNAME)
+    await page.type('#password', YUQUE_CONFIG.PASSWORD)
     await page.click('button')
     await page.waitForNavigation()
 

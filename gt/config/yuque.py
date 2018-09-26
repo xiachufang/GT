@@ -6,4 +6,4 @@ class YuqueConfig(BaseSettings):
     PASSWORD = "pass"
 
     class Config:
-        env_prefix = 'YUQUE'
+        env_prefix = 'YUQUE_'
