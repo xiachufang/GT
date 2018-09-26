@@ -28,7 +28,7 @@ from gt.config import YUQUE_CONFIG
 
 @asynccontextmanager
 async def new_browser():
-    browser = await launch()
+    browser = await launch(args=['--no-sandbox'])
     try:
         yield browser
     finally:
