@@ -11,6 +11,7 @@ slack-machine = "*"
 texttable = "*"
 pyppeteer = "*"
 "delegator.py" = "*"
+docopt = "*"
 
 [dev-packages]
 ipython = "*"
