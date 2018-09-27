@@ -5,6 +5,7 @@ from machine.plugins.base import Message, MachineBasePlugin
 from machine.plugins.decorators import respond_to
 
 from gt.libs.docopt import docopt, DocoptExit
+from gt.utils.helpers import trim_doc
 
 
 class YuQuePlugin(MachineBasePlugin):
@@ -31,13 +32,15 @@ class YuQuePlugin(MachineBasePlugin):
         args = list(filter(None, [a.strip() for a in arg.split()]))
         try:
             arguments = docopt(self.__doc__, args)
-        except DocoptExit as e:
-            msg.say(self.__doc__, msg.thread_ts)
-            return
+        except DocoptExit:
+            return self.reply_help(msg)
         if arguments.get('-h') or arguments.get('--help'):
-            msg.say(self.__doc__, msg.thread_ts)
+            self.reply_help(msg)
 
         self.process_arguments(msg, arguments)
+
+    def reply_help(self, msg: Message):
+        msg.say(trim_doc(self.__doc__), msg.thread_ts)
 
     def process_arguments(self, msg: Message, arguments: dict):
         subcommand_prefix = 'subcommand_'
