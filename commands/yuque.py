@@ -40,7 +40,7 @@ async def get_invitation_url() -> str:
         await login(browser)
 
         page = await browser.newPage()
-        await page.goto('https://xcf.yuque.com/dashboard/manage/member')
+        await page.goto('https://xcf.yuque.com/admin/dashboard/manage/member')
 
         await page.click('.btn-invite')
         await asyncio.sleep(1)
@@ -64,7 +64,7 @@ async def add_to_tech_team(name: str):
 async def login(browser: Browser):
     page = await browser.newPage()
     await page.goto('https://xcf.yuque.com/login')
-
+    await asyncio.sleep(1)
     await page.type('#login', YUQUE_CONFIG.USERNAME)
     await page.type('#password', YUQUE_CONFIG.PASSWORD)
     await page.click('button')
