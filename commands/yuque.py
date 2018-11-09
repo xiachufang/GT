@@ -51,6 +51,8 @@ async def get_invitation_url() -> str:
 
 async def add_to_tech_team(name: str):
     async with new_browser() as browser:
+        await login(browser)
+
         page = await browser.newPage()
         await page.goto('https://xcf.yuque.com/all/members')
 
