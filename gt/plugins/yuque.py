@@ -63,7 +63,7 @@ class YuQuePlugin(MachineBasePlugin):
             msg.say(f'error: {c.err}', msg.thread_ts)
 
     def subcommand_add(self, msg: Message, arguments: dict):
-        name = arguments.get('name')
+        name = arguments.get('<name>')
         c = delegator.run(f'python commands/yuque.py add-to-tech-team {name}',
                           cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         if c.ok:
